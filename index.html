@@ -15,83 +15,120 @@
             min-height: 100vh;
             display: grid;
             place-items: center;
-            background: #000;
+            background: rgb(5, 15, 5);
             overflow: hidden;
+            position: relative;
         }
 
         .container {
             position: relative;
             padding: 4rem 6rem;
             text-align: center;
-            z-index: 1;
+            z-index: 2;
+            border: 1px solid rgba(0, 255, 100, 0.2);
+            background: rgba(0, 10, 0, 0.6);
         }
 
         h1 {
-            font-family: 'Arial', sans-serif;
-            font-size: 3rem;
-            color: #00ff88;
+            font-family: 'Courier New', monospace;
+            font-size: 2.5rem;
+            color: #00ff64;
             margin-bottom: 1.5rem;
-            opacity: 0;
-            animation: fadeIn 1s ease-out forwards;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(0, 255, 100, 0.3);
+            animation: glitch 3s infinite;
         }
 
-        .border-animation {
+        /* Animação de glitch no texto */
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        /* Partículas animadas */
+        .particles {
             position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            grid-template-rows: repeat(10, 1fr);
-            pointer-events: none;
+            z-index: 1;
         }
 
-        .dot {
-            width: 6px;
-            height: 6px;
-            background: #00ff88;
+        .particle {
+            position: absolute;
+            background: #00ff64;
             border-radius: 50%;
-            animation: rotate 20s linear infinite;
-            opacity: 0.3;
+            animation: float linear infinite;
         }
 
-        @keyframes rotate {
-            from { transform: rotate(0deg) translateX(40px) rotate(0deg); }
-            to { transform: rotate(360deg) translateX(40px) rotate(-360deg); }
-        }
-
-        @keyframes fadeIn {
+        @keyframes float {
+            from {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 0.3;
+            }
             to {
-                opacity: 1;
-                transform: translateY(0);
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
             }
         }
 
+        /* Animações circulares */
+        .orb {
+            position: absolute;
+            border: 1px solid rgba(0, 255, 100, 0.2);
+            border-radius: 50%;
+            animation: orbit linear infinite;
+        }
+
+        @keyframes orbit {
+            from { transform: rotate(0deg) translateX(150px) rotate(0deg); }
+            to { transform: rotate(360deg) translateX(150px) rotate(-360deg); }
+        }
+
         .contact {
-            color: #00ff88;
+            color: #00ff64;
             font-family: monospace;
             font-size: 1.2rem;
             margin-top: 2rem;
-            opacity: 0;
-            animation: fadeIn 1s ease-out 0.5s forwards;
+            position: relative;
+            padding: 10px;
+            overflow: hidden;
         }
 
         .contact a {
             color: inherit;
             text-decoration: none;
-            transition: opacity 0.3s;
+            position: relative;
+            transition: 0.3s;
         }
 
-        .contact a:hover {
-            opacity: 0.7;
+        .contact a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #00ff64;
+            transition: 0.3s;
         }
 
-        /* Cria padrão de pontos animados */
-        .border-animation div:nth-child(1) { animation-delay: -2s; grid-area: 1 / 1; }
-        .border-animation div:nth-child(2) { animation-delay: -4s; grid-area: 1 / 10; }
-        .border-animation div:nth-child(3) { animation-delay: -6s; grid-area: 10 / 1; }
-        .border-animation div:nth-child(4) { animation-delay: -8s; grid-area: 10 / 10; }
+        .contact a:hover::before {
+            width: 100%;
+        }
+
+        /* Cria múltiplas partículas */
+        .particles span {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #00ff64;
+            border-radius: 50%;
+        }
 
         @media (max-width: 768px) {
             .container {
@@ -99,24 +136,46 @@
             }
             
             h1 {
-                font-size: 2rem;
+                font-size: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="border-animation">
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
+    <!-- Partículas de fundo -->
+    <div class="particles">
+        <!-- Partículas geradas via CSS -->
+        <span class="particle" style="left: 10%; animation-duration: 15s;"></span>
+        <span class="particle" style="left: 30%; animation-duration: 20s;"></span>
+        <span class="particle" style="left: 50%; animation-duration: 25s;"></span>
+        <span class="particle" style="left: 70%; animation-duration: 18s;"></span>
+        <span class="particle" style="left: 90%; animation-duration: 22s;"></span>
     </div>
 
+    <!-- Animações orbitais -->
+    <div class="orb" style="animation-duration: 40s;"></div>
+    <div class="orb" style="animation-duration: 35s; animation-direction: reverse;"></div>
+
     <div class="container">
-        <h1>EM CONSTRUÇÃO</h1>
+        <h1>Em Breve</h1>
         <div class="contact">
             <a href="mailto:contato@exemplo.com">contato@exemplo.com</a>
         </div>
     </div>
+
+    <script>
+        // Adiciona partículas dinâmicas
+        function createParticles() {
+            const particles = document.querySelector('.particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('span');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = Math.random() * 10 + 10 + 's';
+                particles.appendChild(particle);
+            }
+        }
+        createParticles();
+    </script>
 </body>
 </html>
